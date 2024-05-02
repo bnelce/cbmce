@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+    <script src="contador.js"></script>
+    <header>
+        <img src="imagem/llogo.jpg" style="width: 50%; padding-left: 26%;">
+    </header>
+</head>
+<body>
+    <div id="conta">
+    <p>Visitante: <span id="contador">0</span>.</p>
+    </div>
+
+    <div id="quadro">
+        <div id="listaut">
+            <h3>Links úteis</h3>
+            <ul>
+             <li><a href="https://cod.cb.ce.gov.br/">COD</a></li>
+             <li><a href="https://sentinela2.cb.ce.gov.br/v1.6/sentinela_Login/sentinela_Login.php">Sentinela</a></li>
+             <li><a href="https://meu.cb.ce.gov.br/">Meu CBMCE</a></li>
+             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScsDF7IlzqkWFdwZs2Hz_crdVByoritpOgndSA8vnwjwDLaNA/viewform?pli=1">Estatísticas de Ocorrências</a></li>
+             <li><a href="http://www.google.com">Acessar internet</a></li>
+            </ul>
+        </div>
+        <div id="vtr">
+            <h3>SOCORRO</h3>
+            <ul>
+                <li><a href="https://docs.google.com/forms/d/1OsdKHj9aTW1CTzMMVV3byIGW_W7JMFutToKRs-H7MjQ/edit">Viatura</a></li>
+                <li><a href="https://docs.google.com/forms/d/11DPZ-cGAEbmbvKnqyeEFym_UWUcKaihMLJ02W35JwvA/viewform?edit_requested=true">Material</a></li>
+            </ul>
+            </div> 
+            <div id="vtr2">                   
+            <h3>SALVAMENTO</h3>
+            <ul>
+                <li>Viatura</li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScoMnfKY7CBI3gviHIgog8DlTf9ieSAUug-mgYgqB4sYLYV6A/viewform">Material</a></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Função para incrementar o contador de visitantes e exibi-lo na página
+        function incrementVisitCount() {
+            // Verifica se já existe um contador armazenado localmente
+            if (localStorage.getItem('visitCount')) {
+                // Se existir, obtém o valor do contador armazenado
+                var visitCount = parseInt(localStorage.getItem('visitCount'));
+                // Incrementa o contador
+                visitCount++;
+            } else {
+                // Se não existir, define o contador como 1
+                var visitCount = 1;
+            }
+            
+            // Atualiza o valor do contador na página
+            document.getElementById('contador').textContent = visitCount;
+
+            // Armazena o novo valor do contador localmente
+            localStorage.setItem('visitCount', visitCount);
+        }
+
+        // Chama a função para incrementar o contador quando a página é carregada
+        window.onload = function() {
+            incrementVisitCount();
+        };
+    </script>
+
+    <footer><h5><bold>(</bold>c<u>bKeepe</u>r<bold>)</bold></footer><span id="contador">0</span>
+
+    
+</body>
+</html>
