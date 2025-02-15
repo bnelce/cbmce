@@ -1,32 +1,36 @@
 // app/materiais/[id]/page.tsx
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import EditMaterialForm from "./EditMaterialForm";
 
-// Exemplo de mock local
-const materiaisMock = [
-  { id: "1", nome: "Mangueira de Incêndio", descricao: "Mangueira de 15m" },
-  { id: "2", nome: "Extintor ABC", descricao: "Extintor de 6kg" },
-  { id: "3", nome: "Colete Salva-Vidas", descricao: "Tamanho universal" },
-];
+interface Material {
+  id: string;
+  nome: string;
+  descricao?: string;
+  criadoEm: string;
+  atualizadoEm: string;
+}
 
-export default async function DetalhesMaterialPage({
+export default async function EditMaterialPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const { id } = params;
-  // Se fosse com Prisma:
-  // const material = await prisma.material.findUnique({ where: { id } })
-  const material = materiaisMock.find((m) => m.id === id);
+  // Busca o material no banco de dados
+  const material = await prisma.material.findUnique({
+    where: { id: params.id },
+  });
 
+  // Se não existir, retornamos um 404
   if (!material) {
     return notFound();
   }
 
+  // Renderiza o formulário de edição, passando o material como prop
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-2">{material.nome}</h1>
-      <p className="mb-4">{material.descricao}</p>
-      {/* Aqui poderíamos colocar um botão de editar ou algo assim */}
+      <h1 className="text-2xl font-bold mb-4">Editar Material</h1>
+      <EditMaterialForm material={material} />
     </div>
   );
 }
