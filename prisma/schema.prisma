@@ -1,0 +1,58 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Material {
+  id               String            @id @default(uuid())
+  nome             String
+  descricao        String?
+  categoria        String?
+  fotoUrl          String?
+  criadoEm         DateTime          @default(now())
+  atualizadoEm     DateTime          @updatedAt
+
+  // Relação com ConferenciaItem
+  conferenciaItems ConferenciaItem[]
+}
+
+model Local {
+  id            String       @id @default(uuid())
+  nome          String
+  tipo          String
+  descricao     String?
+  criadoEm      DateTime     @default(now())
+  atualizadoEm  DateTime     @updatedAt
+
+  // Relação com Conferencia
+  conferencias  Conferencia[]
+}
+
+model Conferencia {
+  id              String           @id @default(uuid())
+  localId         String
+  local           Local            @relation(fields: [localId], references: [id])
+  dataConferencia DateTime
+  responsavel     String
+  observacoes     String?
+  criadoEm        DateTime         @default(now())
+  atualizadoEm    DateTime         @updatedAt
+
+  // Relação com ConferenciaItem
+  itens           ConferenciaItem[]
+}
+
+model ConferenciaItem {
+  id            String       @id @default(uuid())
+  conferenciaId String
+  conferencia   Conferencia  @relation(fields: [conferenciaId], references: [id])
+  materialId    String
+  material      Material     @relation(fields: [materialId], references: [id])
+  quantidade    Int
+  status        String?
+  observacao    String?
+}
