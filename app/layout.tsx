@@ -1,4 +1,5 @@
-import { Linkedin, MessageCircle } from "lucide-react";
+import { Home, Linkedin, MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { ReactNode } from "react";
 import "./globals.css";
 
@@ -13,8 +14,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR">
       <body className="min-h-screen bg-slate-50 flex flex-col">
         {/* Cabeçalho */}
-        <header className="bg-white shadow p-4 flex justify-center items-center">
+        <header className="bg-white shadow p-4 flex justify-between items-center">
+          {/* Botão para voltar à página inicial */}
+          <Link href="/">
+            <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition">
+              <Home size={20} />
+              <span className="text-sm font-medium">Início</span>
+            </button>
+          </Link>
+
           <h1 className="text-lg font-bold">Conferência de Materiais</h1>
+
+          {/* Espaço reservado para alinhar o título no centro */}
+          <div className="w-16"></div>
         </header>
 
         {/* Conteúdo principal */}

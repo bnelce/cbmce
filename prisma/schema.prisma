@@ -18,6 +18,9 @@ model Material {
 
   // Relação com ConferenciaItem
   conferenciaItems ConferenciaItem[]
+
+  // Relação com Inventário
+  inventarios LocalMaterial[]
 }
 
 model Local {
@@ -28,9 +31,24 @@ model Local {
   criadoEm      DateTime     @default(now())
   atualizadoEm  DateTime     @updatedAt
 
-  // Relação com Conferencia
+  // Relação com Conferencias
   conferencias  Conferencia[]
+
+  // Relação com Inventário
+  inventarios LocalMaterial[]
 }
+
+model LocalMaterial {
+  id              String    @id @default(uuid())
+  localId         String
+  local           Local     @relation(fields: [localId], references: [id], onDelete: Cascade)
+  materialId      String
+  material        Material  @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  quantidadeMinima Int
+
+  @@unique([localId, materialId])  // Chave composta para evitar duplicatas
+}
+
 
 model Conferencia {
   id              String           @id @default(uuid())

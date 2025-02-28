@@ -1,18 +1,39 @@
 // app/api/materials/route.ts
-
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-// GET /api/materials - retorna todos os materiais
-export async function GET() {
+// app/api/materiais/route.ts
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const localId = searchParams.get("localId");
+
   try {
-    const materials = await prisma.material.findMany({
-      orderBy: { criadoEm: "desc" },
-    });
-    return NextResponse.json(materials);
+    if (localId) {
+      // Retorna somente materiais do inventário do local
+      const inventario = await prisma.localMaterial.findMany({
+        where: { localId },
+        include: { material: true },
+      });
+
+      return NextResponse.json(
+        inventario.map((item) => ({
+          id: item.material.id,
+          nome: item.material.nome,
+          quantidadeMinima: item.quantidadeMinima,
+        }))
+      );
+    } else {
+      // Se não tiver localId, retorna TODOS os materiais
+      const todosMateriais = await prisma.material.findMany({
+        orderBy: { criadoEm: "desc" },
+      });
+      return NextResponse.json(todosMateriais);
+    }
   } catch (error) {
+    console.error("Erro ao buscar materiais:", error);
     return NextResponse.json(
-      { error: "Erro ao buscar materiais" + error },
+      { error: "Erro ao buscar materiais." },
       { status: 500 }
     );
   }

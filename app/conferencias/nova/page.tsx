@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,7 +12,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// Definição do tipo Local
 interface Local {
   id: string;
   nome: string;
@@ -22,9 +22,9 @@ export default function NovaConferenciaPage() {
   const router = useRouter();
   const [locais, setLocais] = useState<Local[]>([]);
   const [localId, setLocalId] = useState<string>("");
+  const [responsavel, setResponsavel] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
-  // Carrega os locais dinamicamente
   useEffect(() => {
     async function fetchLocais() {
       try {
@@ -42,8 +42,13 @@ export default function NovaConferenciaPage() {
 
   function iniciarConferencia() {
     if (!localId) return alert("Por favor, selecione um local.");
+    if (!responsavel.trim()) return alert("Por favor, informe o responsável.");
 
-    router.push(`/conferencias/nova/${localId}`);
+    router.push(
+      `/conferencias/nova/${localId}?responsavel=${encodeURIComponent(
+        responsavel
+      )}`
+    );
   }
 
   return (
@@ -54,7 +59,8 @@ export default function NovaConferenciaPage() {
         <p className="text-gray-500">Carregando locais...</p>
       ) : (
         <>
-          {locais.length > 0 ? (
+          <div className="mb-4">
+            <label className="font-semibold">Local da Conferência</label>
             <Select onValueChange={(value) => setLocalId(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecione um local" />
@@ -67,16 +73,25 @@ export default function NovaConferenciaPage() {
                 ))}
               </SelectContent>
             </Select>
-          ) : (
-            <p className="text-gray-500">Nenhum local encontrado.</p>
-          )}
+          </div>
+
+          <div className="mb-4">
+            <label className="font-semibold">
+              Responsável pela Conferência
+            </label>
+            <Input
+              value={responsavel}
+              onChange={(e) => setResponsavel(e.target.value)}
+              placeholder="Digite seu nome"
+            />
+          </div>
         </>
       )}
 
       <Button
-        className="mt-4 w-full"
+        className="w-full"
         onClick={iniciarConferencia}
-        disabled={!localId}
+        disabled={!localId || !responsavel.trim()}
       >
         Iniciar Conferência
       </Button>

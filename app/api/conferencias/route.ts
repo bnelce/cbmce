@@ -56,3 +56,25 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    // Busca todas as conferências, incluindo o nome do local
+    const conferencias = await prisma.conferencia.findMany({
+      include: {
+        local: {
+          select: { nome: true },
+        },
+      },
+      orderBy: { dataConferencia: "desc" },
+    });
+
+    return NextResponse.json(conferencias);
+  } catch (error) {
+    console.error("Erro ao buscar histórico de conferências:", error);
+    return NextResponse.json(
+      { error: "Erro ao buscar conferências" },
+      { status: 500 }
+    );
+  }
+}
